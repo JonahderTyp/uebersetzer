@@ -7,7 +7,9 @@
 
 {% block content %}
 <div>
-    <h1>Chatroom von {{ request.args.get('name') }} ({{ request.args.get('language') }})</h1>
+    <h1 class="text-center">Chatroom von</h1>
+    <h1 class="text-center">{{ request.args.get('name') }} ({{ request.args.get('language') }})
+    </h1>
 
     <div id="messages">
         <!-- Platzhalter entfernen oder anpassen -->
