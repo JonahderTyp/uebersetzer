@@ -9,8 +9,36 @@
 <div>
     <h1>Chatroom von {{ request.args.get('name') }} ({{ request.args.get('language') }})</h1>
 
-    <div>
+    <div id="messages">
+        <!-- Platzhalter entfernen oder anpassen -->
+        <div class="card message-card" id="message-1">
+            <div class="card-body">
+                <h5 class="card-title"><span class="et-name">USERNAME</span></h5>
+                <p class="card-text">
+                    <span class="et-message">Beispielnachricht</span>
+                </p>
+                <p>
+                    <span class="et-timestamp">TIMESTAMP</span>
+                </p>
+            </div>
+        </div>
+    </div>
 
+
+    <hr class="my-5">
+
+    <div>
+        <form id="messageForm">
+            <div class="mb-3">
+                <!-- <label for="message" class="form-label">Nachricht</label> -->
+                <textarea class="form-control" id="message" name="message" rows="4"
+                    placeholder="Schreibe hier deine Nachricht..." required></textarea>
+                <div class="invalid-feedback">
+                    Bitte gib eine Nachricht ein.
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary">Senden</button>
+        </form>
     </div>
 
 
@@ -19,6 +47,11 @@
 
 {% block scripts %}
 {{ super() }}
+
+<script>
+    const USERNAME = "{{ request.args.get('name') }}";
+    const LANGUAGE = "{{ request.args.get('language') }}";
+</script>
 
 <script src="{{ url_for('static', filename='chatroom.js') }}"></script>
 
