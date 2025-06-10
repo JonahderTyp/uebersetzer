@@ -58,6 +58,7 @@ class Message(Base):
     @staticmethod
     def get_via_id(id: int) -> Message | None:
         msg: Message = db.session.query(Message).filter_by(id=id).first()
+        return msg
 
     @staticmethod
     def get_all_messages() -> List[Message]:
