@@ -6,10 +6,10 @@ from datetime import datetime as Datetime
 from typing import List, Type, TypeVar
 
 from flask import current_app
-#from flask_login import UserMixin
+# from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import (Boolean, Column, Float, ForeignKey, Integer, String,
-                        Text)
+from sqlalchemy import (Boolean, Column, DateTime, Float, ForeignKey, Integer,
+                        String, Text)
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 from sqlalchemy.sql.expression import and_
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -28,7 +28,7 @@ class Message(Base):
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     content: Mapped[str] = mapped_column(Text, nullable=False)
     timestamp: Mapped[Datetime] = mapped_column(
-        String(50), nullable=False, default=Datetime.now)
+        DateTime(timezone=True), nullable=False, default=Datetime.now)
     author: Mapped[str] = mapped_column(String(50), nullable=False)
     language: Mapped[str] = mapped_column(String(10), nullable=False)
     translate: Mapped[bool] = mapped_column(
@@ -38,6 +38,11 @@ class Message(Base):
     def create_new(
             content: str, timestamp: Datetime, author: str, language: str,
             translate: bool = True) -> Message:
+
+        print("\n\n")
+        print(timestamp)
+        print(type(timestamp))
+        print("\n\n")
         """Create a new message."""
         message = Message(
             content=content,
