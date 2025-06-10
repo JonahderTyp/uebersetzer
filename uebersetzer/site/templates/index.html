@@ -1,16 +1,23 @@
 {% extends 'base.html' %}
 
-{% block title %}Index - {{ super() }}{% endblock %}
-
-{% block navbar_right %}
-<a href="{{ url_for('site.index') }}" class="btn btn-outline-primary">Login</a>
-{% endblock %}
 
 {% block content %}
 <div>
     <h1>Easy Translate</h1>
 
-    <form action="{{ url_for('.chatroom') }}" method="get"></form>
+    <form action="{{ url_for('.chatroom') }}" method="get">
+
+        <label for="name">Enter your name:</label>
+        <input type="text" name="name">
+
+        <label for="language">Select your language:</label>
+        <select name="language">
+            {% for lang in languages %}
+            <option value="{{ lang }}">{{ lang }}</option>
+            {% endfor %}
+        </select>
+        <button type="submit" class="btn btn-primary">Start Chat</button>
+    </form>
 
 
 </div>

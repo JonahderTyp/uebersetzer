@@ -3,14 +3,15 @@
 {% block title %}Index - {{ super() }}{% endblock %}
 
 {% block navbar_right %}
-<a href="{{ url_for('site.login') }}" class="btn btn-outline-primary">Login</a>
 {% endblock %}
 
 {% block content %}
 <div>
-    <h1>URL Shortender</h1>
+    <h1>Chatroom von {{ request.args.get('name') }} ({{ request.args.get('language') }})</h1>
 
+    <div>
 
+    </div>
 
 
 </div>
