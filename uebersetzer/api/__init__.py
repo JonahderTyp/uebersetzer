@@ -39,8 +39,8 @@ def post_message():
     return jsonify(message.to_dict()), 201
 
 
-@chat_api.route('/messages/translate/<int:message_id>', methods=['GET'])
-def translate_message(message_id):
+@chat_api.route('/messages/translate/<int:message_id>/<string:target_language>', methods=['POST', 'GET'])
+def translate_message(message_id, target_language):
     """Translate a message by its ID"""
     message = Message.get_via_id(message_id)
 
@@ -49,10 +49,6 @@ def translate_message(message_id):
 
     # Initialize Mistral API client
     api_key = os.environ.get("MISTRAL_API_KEY")
-
-    # Use the specific Mistral agent for translation
-    data = request.json
-    target_language = data.get('target_language', 'English')
 
     # Prepare the translation request JSON
     translation_request = {
@@ -81,8 +77,16 @@ def translate_message(message_id):
         # Fallback if parsing fails
         translated_text = response.choices[0].message.content
 
-    # Update message with translation
-    message.translated_content = translated_text
-    message.save()
+    try:
+        if isinstance(translated_text, str):
+            translated_dict = json.loads(translated_text)
+        else:
+            translated_dict = translated_text
 
-    return jsonify(message.to_dict()), 200
+        translated_text = translated_dict.get("text", "")
+        if not translated_text:
+            return jsonify({"error": "Translation error: Missing text field"}), 500
+    except (json.JSONDecodeError, AttributeError, TypeError) as e:
+        return jsonify({"error": f"Translation error: {str(e)}"}), 500
+
+    return jsonify({"translated_text": translated_text, "id": message_id}), 200
