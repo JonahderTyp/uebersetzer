@@ -39,7 +39,7 @@ def post_message():
     return jsonify(message.to_dict()), 201
 
 
-@chat_api.route('/messages/translate/<int:message_id>', methods=['POST'])
+@chat_api.route('/messages/translate/<int:message_id>', methods=['GET'])
 def translate_message(message_id):
     """Translate a message by its ID"""
     message = Message.get_via_id(message_id)
