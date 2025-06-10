@@ -8,7 +8,7 @@ from mistralai import Mistral
 
 from ..database.db import Message
 
-chat_api = Blueprint('chat_api', __name__, url_prefix='/api/chat')
+chat_api = Blueprint('chat_api', __name__, url_prefix='/api/')
 
 
 @chat_api.route('/messages', methods=['GET'])
@@ -37,6 +37,7 @@ def post_message():
     )
 
     return jsonify(message.to_dict()), 201
+
 
 @chat_api.route('/messages/translate/<int:message_id>', methods=['POST'])
 def translate_message(message_id):
