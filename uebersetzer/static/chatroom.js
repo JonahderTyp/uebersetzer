@@ -72,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       if (!response.ok) throw new Error(`Server error: ${response.status}`);
       const newMsg = await response.json();
-      appendMessageToChat(newMsg);
+      //appendMessageToChat(newMsg);
       textarea.value = "";
 
       // Update lastMessageId after sending a new message
@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
  * @param {string} data.content - Message text.
  * @param {string} data.timestamp - ISO timestamp.
  */
-function appendMessageToChat(data) {
+async function appendMessageToChat(data) {
   const container = document.createElement("div");
   container.className = "card message-card mb-3";
   if (data.id) container.id = `message-${data.id}`;
@@ -113,7 +113,13 @@ function appendMessageToChat(data) {
   textP.className = "card-text";
   const msgSpan = document.createElement("span");
   msgSpan.className = "et-message";
-  msgSpan.textContent = data.content;
+  if (LANGUAGE === data.language) {
+    msgSpan.textContent = data.content;
+  }
+  else {
+    msgSpan.textContent = await translateMessage(data.id, LANGUAGE);
+  }
+  // msgSpan.textContent = data.content;
   textP.appendChild(msgSpan);
 
   const timeP = document.createElement("p");
@@ -128,4 +134,27 @@ function appendMessageToChat(data) {
   container.appendChild(body);
 
   messagesContainer.appendChild(container);
+}
+
+
+/**
+ * Translates a message by its ID via API and returns the translated text.
+ * @param {Object} originalMessage - The original message object.
+ * @param {number} originalMessage.id - ID of the message to translate.
+ * @param {string} targetLanguage - The language to translate to (e.g. 'English', 'German').
+ * @returns {Promise<string>} - Translated text.
+ */
+async function translateMessage(originalMessageID, targetLanguage) {
+  // if (!originalMessage || !originalMessage.id) {
+  //   throw new Error('Invalid message object: missing id');
+  // }
+  const url = `/api/messages/translate/${originalMessageID}/${encodeURIComponent(targetLanguage)}`;
+  console.log(url);
+  const response = await fetch(url, { method: 'POST' });
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.error || `Translation request failed: ${response.status}`);
+  }
+  const data = await response.json();
+  return data.translated_text;
 }
