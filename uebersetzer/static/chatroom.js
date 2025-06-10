@@ -7,7 +7,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const API_URL = "/api/messages"; // Adjust to your actual messages endpoint
   let lastMessageId = null;
-  const POLLING_INTERVAL = 5000; // Poll every 5 seconds
+  const POLLING_INTERVAL = 2000; // Poll every 2 seconds
 
   // Fetch and display new messages
   async function loadMessages(initialLoad = false) {
