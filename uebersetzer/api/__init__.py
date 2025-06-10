@@ -3,9 +3,8 @@ import os
 from datetime import datetime
 from typing import List
 
-from flask import Blueprint, Flask, jsonify, request
-from mistralai.client import MistralClient
-from mistralai.models.chat_completion import ChatMessage
+from flask import Blueprint, jsonify, request
+from mistralai import Mistral
 
 from ..database.db import Message
 
@@ -39,7 +38,6 @@ def post_message():
 
     return jsonify(message.to_dict()), 201
 
-
 @chat_api.route('/messages/translate/<int:message_id>', methods=['POST'])
 def translate_message(message_id):
     """Translate a message by its ID"""
@@ -50,7 +48,6 @@ def translate_message(message_id):
 
     # Initialize Mistral API client
     api_key = os.environ.get("MISTRAL_API_KEY")
-    client = MistralClient(api_key=api_key)
 
     # Use the specific Mistral agent for translation
     data = request.json
@@ -64,11 +61,16 @@ def translate_message(message_id):
     }
 
     # Send the request to the Mistral agent with the JSON structure
-    response = client.chat(
-        agent="ag:9195f226:20250610:untitled-agent:0cfcafcd",
-        messages=[ChatMessage(
-            role="user", content=f"{translation_request}")]
-    )
+    with Mistral(api_key=api_key) as mistral:
+        response = mistral.agents.complete(
+            agent_id="ag:9195f226:20250610:untitled-agent:0cfcafcd",
+            messages=[
+                {
+                    "role": "user",
+                    "content": f"{translation_request}"
+                }
+            ]
+        )
 
     # Parse response which is structured as a list with a dict containing text and id
     try:
