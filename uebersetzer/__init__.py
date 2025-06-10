@@ -70,6 +70,8 @@ def create_app():
     # Register Blueprints
     from .site import site
     app.register_blueprint(site)
+    from .api import chat_api
+    app.register_blueprint(chat_api)
 
     print("Returning app")
     logging.info("App created successfully")

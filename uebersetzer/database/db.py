@@ -6,7 +6,7 @@ from datetime import datetime as Datetime
 from typing import List, Type, TypeVar
 
 from flask import current_app
-from flask_login import UserMixin
+#from flask_login import UserMixin
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import (Boolean, Column, Float, ForeignKey, Integer, String,
                         Text)
