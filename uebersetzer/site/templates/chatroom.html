@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Index - {{ super() }}{% endblock %}
+
+{% block navbar_right %}
+<a href="{{ url_for('site.login') }}" class="btn btn-outline-primary">Login</a>
+{% endblock %}
+
+{% block content %}
+<div>
+    <h1>URL Shortender</h1>
+
+
+
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+
+<script src="{{ url_for('static', filename='chatroom.js') }}"></script>
+
+{% endblock %}

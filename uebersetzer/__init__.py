@@ -2,10 +2,8 @@ import logging
 import os
 
 from flask import Flask
-from flask_login import LoginManager
 
-from .database.db import User
-from .database.seed import seed_database
+from .database.db import Message
 
 
 def create_app():
@@ -13,10 +11,6 @@ def create_app():
     logging.info("Creating App")
 
     app = Flask(__name__)
-
-    # Load configuration from environment variables
-    app.config["BASE_URL"] = os.environ.get(
-        "BASE_URL", "NO_BASE_URL_PROVIDED")
 
     # Security
     app.config["SECRET_KEY"] = os.environ.get(
@@ -53,14 +47,14 @@ def create_app():
     from .database import db
     db.init_app(app)
 
-    login_manager = LoginManager()
-    login_manager.init_app(app)
-    login_manager.login_view = 'site.login'
-    login_manager.login_message_category = 'danger'
+    # login_manager = LoginManager()
+    # login_manager.init_app(app)
+    # login_manager.login_view = 'site.login'
+    # login_manager.login_message_category = 'danger'
 
-    @login_manager.user_loader
-    def user_loader(user_id):
-        return db.session.query(User).get(user_id)
+    # @login_manager.user_loader
+    # def user_loader(user_id):
+    #     return db.session.query(User).get(user_id)
 
     with app.app_context():
         db.create_all()
@@ -71,7 +65,7 @@ def create_app():
 
         if NEW_DB:
             app.logger.info("All tables are empty. Seeding database...")
-            seed_database()
+            # seed_database()
 
     # Register Blueprints
     from .site import site
